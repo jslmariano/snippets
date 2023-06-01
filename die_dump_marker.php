@@ -47,6 +47,11 @@ if (!function_exists('dump')) {
 if (!function_exists('dd')) {
     function dd(...$vars)
     {
+        header('Access-Control-Allow-Methods: *');
+        header('Access-Control-Allow-Headers: *');
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header("Access-Control-Allow-Credentials: true");
+
         /**
          * AUTOMATIC MARKER
          */
@@ -68,8 +73,14 @@ if (!function_exists('dd')) {
          *        ||
          *        \/
          */
-        foreach ($args as $v) {
-            VarDumper::dump($v);
+
+        try {
+
+            foreach ($args as $v) {
+                VarDumper::dump($v);
+            }
+        } catch (\Throwable $e) {
+            var_dump($e);
         }
 
         exit(1);
